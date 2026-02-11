@@ -5,12 +5,11 @@ WORKDIR /app
 # Instalar uv
 RUN pip install uv
 
-# Copiar metadatos y código
-COPY pyproject.toml /app/
+# Copiar código
 COPY src/ /app/src/
 
-# Instalar dependencias del proyecto
-RUN uv pip install --system .
+# Instalar dependencias necesarias con uv
+RUN uv pip install --system fastapi uvicorn
 
 EXPOSE 8000
 
