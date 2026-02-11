@@ -1,35 +1,32 @@
----
-  name: Build & Push
-  
-  on:
-    workflow_dispatch:
-  
-  jobs:
-    build-and-push:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
+name: Build & Push
 
-        - name: Login to Docker Hub
-          uses: docker/login-action@v3
-          with:
-            username: ${{ secrets.DOCKER_USER }}
-            password: ${{ secrets.DOCKER_PASSWORD }}
+on:
+  workflow_dispatch:
 
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v3
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
 
-        - name: Set up Docker Buildx
-          uses: docker/setup-buildx-action@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        - name: Build and push
-          uses: docker/build-push-action@v6
-          with:
-            context: .
-            file: Dockerfile.db
-            push: true
-            build-args: |
-              BUILD_VERSION=latest
-            tags: tcamba/dap-app-sampledb:latest
-  
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USER }}/daq-app:latest
